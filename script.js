@@ -40,6 +40,7 @@ for (var row = 0; row < grid.length; row++) {
 	for (var col = 0; col < grid[row].length; col++) {
 		grid[row][col] = {
 			x: col, y: row,
+			cost: Infinity,
 			visited: false,
 			reachable: false,
 			isOnPath: false,
@@ -107,6 +108,7 @@ canvas.onclick = function (e) {
 		&& grid[gridY][gridX] && grid[gridY][gridX].walkable
 	) {
 		start = grid[gridY][gridX];
+		start.cost = 0;
 		state = STATE_SELECT_END;
 		reachables.push(start)
 	}
@@ -133,7 +135,7 @@ function run(start, end) {
 }
 
 function step(start, end) {
-	node = getNextReachable();
+	node = getNextReachable(end);
 	if (node === end) {
 		state = STATE_PATH_FOUND;
 		return generatePath(end);
@@ -141,8 +143,12 @@ function step(start, end) {
 
 	getNodeNeighbours(node).forEach(function (neighbour) {
 		if (!neighbour.reachable) {
-			neighbour.reachedFrom = node;
 			addReachable(neighbour);
+		}
+
+		if (node.cost + 1 < neighbour.cost) {
+			neighbour.reachedFrom = node;
+			neighbour.cost = node.cost + 1;
 		}
 	});
 
@@ -159,10 +165,21 @@ function generatePath(lastNode) {
 	}
 }
 
-function getNextReachable() {
+function getNextReachable(end) {
+	var next, nextIndex, minCost = Infinity,
+		costToEnd;
+
+	reachables.forEach(function (reachable, index) {
+		costToEnd = calculateDistance(reachable, end);
+		if (reachable.cost + costToEnd < minCost) {
+			minCost = reachable.cost + costToEnd;
+			nextIndex = index;
+			next = reachable;
+		}
+	});
 	// find appropriate from reachables
 	// and remove from reachables
-	next = reachables.shift();
+	reachables.splice(nextIndex, 1);
 	// add to visited
 	next.visited = true;
 	return next;
