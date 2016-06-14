@@ -102,7 +102,10 @@ canvas.onclick = function (e) {
 	var gridX = parseInt(coordX / nodeWidth);
 	var gridY = parseInt(coordY / nodeHeight);
 
-	if (state == STATE_SELECT_START && grid[gridY][gridX]) {
+	if (
+		state == STATE_SELECT_START
+		&& grid[gridY][gridX] && grid[gridY][gridX].walkable
+	) {
 		start = grid[gridY][gridX];
 		state = STATE_SELECT_END;
 		reachables.push(start)
@@ -110,6 +113,7 @@ canvas.onclick = function (e) {
 	else if (
 		state == STATE_SELECT_END
 		&& grid[gridY][gridX] && start !== grid[gridY][gridX]
+		&& grid[gridY][gridX].walkable
 	) {
 		end = grid[gridY][gridX];
 		state = STATE_FIND_PATH;
