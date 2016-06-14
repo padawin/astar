@@ -143,8 +143,12 @@ function step(start, end) {
 
 	getNodeNeighbours(node).forEach(function (neighbour) {
 		if (!neighbour.reachable) {
-			neighbour.reachedFrom = node;
 			addReachable(neighbour);
+		}
+
+		if (node.cost + 1 < neighbour.cost) {
+			neighbour.reachedFrom = node;
+			neighbour.cost = node.cost + 1;
 		}
 	});
 
@@ -162,9 +166,20 @@ function generatePath(lastNode) {
 }
 
 function getNextReachable(end) {
+	var next, nextIndex, minCost = Infinity,
+		costToEnd;
+
+	reachables.forEach(function (reachable, index) {
+		costToEnd = calculateDistance(reachable, end);
+		if (reachable.cost + costToEnd < minCost) {
+			minCost = reachable.cost + costToEnd;
+			nextIndex = index;
+			next = reachable;
+		}
+	});
 	// find appropriate from reachables
 	// and remove from reachables
-	next = reachables.shift();
+	reachables.splice(nextIndex, 1);
 	// add to visited
 	next.visited = true;
 	return next;
