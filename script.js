@@ -42,6 +42,7 @@ for (var row = 0; row < grid.length; row++) {
 			x: col, y: row,
 			visited: false,
 			reachable: false,
+			isOnPath: false,
 			reachedFrom: null,
 			walkable: grid[row][col] === 0
 		};
@@ -65,6 +66,9 @@ function draw(to, from) {
 			}
 			else if (from == grid[row][col]) {
 				color = 'blue';
+			}
+			else if (grid[row][col].isOnPath) {
+				color = 'purple';
 			}
 			else if (grid[row][col].visited) {
 				color = 'red';
@@ -146,6 +150,7 @@ function generatePath(lastNode) {
 		node = lastNode;
 	while (node) {
 		path.unshift(node);
+		node.isOnPath = true;
 		node = node.reachedFrom;
 	}
 }
