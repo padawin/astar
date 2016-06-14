@@ -168,6 +168,10 @@ function getNextReachable() {
 	return next;
 }
 
+function calculateDistance(nodeFrom, nodeTo) {
+	return Math.abs(nodeFrom.x - nodeTo.x) + Math.abs(nodeFrom.y - nodeTo.y);
+}
+
 function addReachable(node) {
 	node.reachable = true;
 	reachables.push(node)
