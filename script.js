@@ -40,6 +40,7 @@ for (var row = 0; row < grid.length; row++) {
 	for (var col = 0; col < grid[row].length; col++) {
 		grid[row][col] = {
 			x: col, y: row,
+			cost: Infinity,
 			visited: false,
 			reachable: false,
 			isOnPath: false,
@@ -107,6 +108,7 @@ canvas.onclick = function (e) {
 		&& grid[gridY][gridX] && grid[gridY][gridX].walkable
 	) {
 		start = grid[gridY][gridX];
+		start.cost = 0;
 		state = STATE_SELECT_END;
 		reachables.push(start)
 	}
