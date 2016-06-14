@@ -135,7 +135,7 @@ function run(start, end) {
 }
 
 function step(start, end) {
-	node = getNextReachable();
+	node = getNextReachable(end);
 	if (node === end) {
 		state = STATE_PATH_FOUND;
 		return generatePath(end);
@@ -161,7 +161,7 @@ function generatePath(lastNode) {
 	}
 }
 
-function getNextReachable() {
+function getNextReachable(end) {
 	// find appropriate from reachables
 	// and remove from reachables
 	next = reachables.shift();
