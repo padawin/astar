@@ -114,8 +114,6 @@ canvas.onclick = function (e) {
 	) {
 		end = grid[gridY][gridX];
 		state = STATE_FIND_PATH;
-	}
-	else if (state == STATE_FIND_PATH) {
 		run(start, end);
 	}
 
